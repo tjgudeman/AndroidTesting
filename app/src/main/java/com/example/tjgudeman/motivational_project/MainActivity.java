@@ -6,7 +6,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.SpannableString;
+import android.text.TextWatcher;
 import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
 import android.view.KeyEvent;
@@ -14,9 +16,12 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
+
+    EditText textBox1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +29,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        textBox1 = (EditText) findViewById(R.id.username);
+        checkForEmpty();
+        textBox1.addTextChangedListener(mTextWatcher);
+
 
 // Textbox number 1 which welcomes the user to the app
         TextView text = (TextView) findViewById(R.id.text);
@@ -46,20 +56,29 @@ public class MainActivity extends AppCompatActivity {
 //        spanString.setSpan(new StyleSpan(Typeface.BOLD), 0, spanString2.length(), 0);
 //        text2.setText(spanString2);
 
+        // Button is placed about textEdit because textEdit determines if button is enabled
+        Button button= (Button) findViewById(R.id.button);
 
 
-        EditText editText = (EditText) findViewById(R.id.username);
-        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                boolean worked = false;
-                if(actionId == EditorInfo.IME_ACTION_SEND){
-                    //sendMessage();
-                    worked = true;
-                }
-                return worked;
-            }
-        });
+//       EditText editText = (EditText) findViewById(R.id.username);
+////        String textInEditText= editText.getText().toString();
+////        if(textInEditText.length() == 0){
+////            button.setEnabled(false);
+////            button.setText("Please enter you name ^^");
+////        }
+//        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//            @Override
+//            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+//                boolean worked = false;
+//                if(actionId == EditorInfo.IME_ACTION_SEND){
+//                    //sendMessage();
+//                    worked = true;
+//                }
+//                return worked;
+//            }
+//        });
+
+
 
 
 
@@ -71,6 +90,9 @@ public class MainActivity extends AppCompatActivity {
 //                        .setAction("Action", null).show();
 //            }
 //        });
+
+
+
     }
 
     @Override
@@ -94,4 +116,38 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
+    private final TextWatcher mTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+           // textBox1.setText("Before TExt Changed");
+            System.out.println("tester");
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            checkForEmpty();
+
+        }
+    };
+
+    void checkForEmpty(){
+        Button button = (Button) findViewById(R.id.button);
+        String name = textBox1.getText().toString();
+        if(name.length() < 5){
+            button.setEnabled(false);
+        } else {
+            button.setEnabled(true);
+        }
+    }
+
+
 }
