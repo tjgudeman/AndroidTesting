@@ -1,5 +1,6 @@
 package com.example.tjgudeman.motivational_project;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -21,7 +22,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
 
-    EditText textBox1;
+    public static EditText textBox1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         textBox1.addTextChangedListener(mTextWatcher);
 
 
-// Textbox number 1 which welcomes the user to the app
+// *** Textbox number 1 which welcomes the user to the app ****
         TextView text = (TextView) findViewById(R.id.text);
         SpannableString content = new SpannableString("Content");
         String textBox = "Welcome to my Tester App!";
@@ -48,35 +49,20 @@ public class MainActivity extends AppCompatActivity {
         text.setText(spanString);
 
 
- //       TextView text2 = (TextView) findViewById(R.id.text2);
-//        String textBox2= "Please enter your name below.";
 
-//        SpannableString spanString2 = new SpannableString("Please"); //Hardcoded because Android Studio was giving me problems
-//        spanString.setSpan(new UnderlineSpan(), 0, spanString2.length(), 0);
-//        spanString.setSpan(new StyleSpan(Typeface.BOLD), 0, spanString2.length(), 0);
-//        text2.setText(spanString2);
 
-        // Button is placed about textEdit because textEdit determines if button is enabled
         Button button= (Button) findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener(){
+
+            public void onClick(View v){
+                Intent i = new Intent(getApplicationContext(),EnterBirthDay.class);
+                startActivity(i);
+
+            }
+
+        });
 
 
-//       EditText editText = (EditText) findViewById(R.id.username);
-////        String textInEditText= editText.getText().toString();
-////        if(textInEditText.length() == 0){
-////            button.setEnabled(false);
-////            button.setText("Please enter you name ^^");
-////        }
-//        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//            @Override
-//            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-//                boolean worked = false;
-//                if(actionId == EditorInfo.IME_ACTION_SEND){
-//                    //sendMessage();
-//                    worked = true;
-//                }
-//                return worked;
-//            }
-//        });
 
 
 
@@ -94,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -144,8 +131,10 @@ public class MainActivity extends AppCompatActivity {
         String name = textBox1.getText().toString();
         if(name.length() < 5){
             button.setEnabled(false);
+            button.setText("Enter Name");
         } else {
             button.setEnabled(true);
+            button.setText("Contiune");
         }
     }
 
