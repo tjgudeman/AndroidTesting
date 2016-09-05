@@ -15,10 +15,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-medium"
-        android:textStyle="normal|bold"
+        android:textStyle="normal"
         android:gravity="center"
         android:textSize="32sp"
         />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/text1B"
+        />
+
 
 </RelativeLayout>
 

@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         TextView text = (TextView) findViewById(R.id.text);
         SpannableString content = new SpannableString("Content");
         String textBox = "Welcome to my Tester App!";
-        String textBox2= "Please enter your name below.";
+        String textBox2= "Step 1) Please enter your name below.";
 
         // Way to change format of textbox number 1 in a dynamic way
         SpannableString spanString = new SpannableString(textBox + "\n\n" + textBox2);
@@ -108,8 +108,7 @@ public class MainActivity extends AppCompatActivity {
     private final TextWatcher mTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-           // textBox1.setText("Before TExt Changed");
-            System.out.println("tester");
+
 
         }
 
@@ -134,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
             button.setText("Enter Name");
         } else {
             button.setEnabled(true);
-            button.setText("Contiune");
+            button.setText("Contiune to step 2");
         }
     }
 
