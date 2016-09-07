@@ -21,10 +21,54 @@
         />
 
     <TextView
+        android:id="@+id/monthText"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-medium"
+        android:textStyle="bold"
+        android:gravity="left"
+        android:textSize="16sp"
         android:layout_below="@+id/text1B"
         />
+
+    <Spinner
+        android:id="@+id/month"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/monthText"
+        android:layout_marginBottom="10dp"
+        />
+
+    <TextView
+        android:id="@+id/dayText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-medium"
+        android:textStyle="bold"
+        android:gravity="left"
+        android:textSize="16sp"
+        android:layout_below="@+id/month"
+        />
+
+    <Spinner
+        android:id="@+id/day"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dayText"
+        android:layout_marginBottom="10dp"
+        />
+
+    <TextView
+    android:id="@+id/yearText"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fontFamily="sans-serif-medium"
+    android:textStyle="bold"
+    android:gravity="left"
+    android:textSize="16sp"
+    android:layout_below="@+id/day"
+    />
+
 
 
 </RelativeLayout>
