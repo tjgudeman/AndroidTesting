@@ -69,6 +69,30 @@
     android:layout_below="@+id/day"
     />
 
+    <Spinner
+        android:id="@+id/year"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/yearText"
+        android:layout_marginBottom="10dp"
+        />
+
+    <LinearLayout
+        android:id="@+id/LayoutBottomButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/moveOn"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="nextView"/>
+
+    </LinearLayout>
+
 
 
 </RelativeLayout>

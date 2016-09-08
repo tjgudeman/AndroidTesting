@@ -13,7 +13,20 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.util.Arrays;
+
 public class EnterBirthDay extends AppCompatActivity {
+
+   final String dayArray31[]={"--","1","2","3" ,"4", "5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20",
+            "21","22","23","24","25","26","27","28","29","30","31"};
+    final String dayArray30[]= Arrays.copyOf(dayArray31, dayArray31.length-1);
+    final String dayArray29[]= Arrays.copyOf(dayArray31, dayArray31.length-2);
+
+    public String daySelected= " ";
+    public String monthSelected= " ";
+    public String yearSelected= " ";
+    //Button moveOn= (Button) findViewById(R.id.moveOn);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,15 +36,29 @@ public class EnterBirthDay extends AppCompatActivity {
         //Create Instance so we can use the "Name" textBox from Main
         new MainActivity();
 
+        //Arrays for Month, Day, Year
+        String monthArray[]={"--","January", "February", "March", "April", "May", "June", "July",
+                "August", "September", "October", "November", "December"};
 
-        //
+    //    final String dayArray31[]={"--","1","2","3" ,"4", "5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20",
+     //           "21","22","23","24","25","26","27","28","29","30","31"};
+        final String dayArray30[]= Arrays.copyOf(dayArray31, dayArray31.length-1);
+        final String dayArray29[]= Arrays.copyOf(dayArray31, dayArray31.length-2);
+
+
+        String yearArray[] = {"--", "1990", "1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999"};
+
+
+
+
+        // ** Text box 1 **
         TextView textView11 = (TextView) findViewById(R.id.text1B);
         String nameOfUser=  MainActivity.textBox1.getText().toString();
 
         int tempLength = nameOfUser.length()-1;
         char tempChar = nameOfUser.charAt(tempLength);
 
-        //Checking to see if name has multiple spaces (So the coma does not look out of place)
+        // Checking to see if name has multiple spaces (So the coma does not look out of place)
         while(tempChar == ' '){
             tempLength -= 1;
             nameOfUser = nameOfUser.substring(0, tempLength+1);
@@ -47,13 +74,7 @@ public class EnterBirthDay extends AppCompatActivity {
         monthTextView.setText("Month");
 
 
-        //Arrays for Month, Day, Year
-        String monthArray[]={"--","January", "February", "March", "April", "May", "June", "July",
-        "August", "September", "October", "November", "December"};
-
-        String dayArray[]={"1","2"};
-
-        // Spinner information (Month)
+        // *** Spinner information (Month) ***
         Spinner monthSpinner= (Spinner) findViewById(R.id.month);
         ArrayAdapter monthAdapter= new ArrayAdapter(this, android.R.layout.simple_spinner_item, monthArray);
         monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -63,19 +84,51 @@ public class EnterBirthDay extends AppCompatActivity {
         TextView dayTextView= (TextView) findViewById(R.id.dayText);
         dayTextView.setText("Day");
 
-        // Spinner Info (Day)
+        // *** Spinner Info (Day) ***
         final Spinner daySpinner= (Spinner) findViewById(R.id.day);
-        ArrayAdapter dayAdapter= new ArrayAdapter(this, android.R.layout.simple_spinner_item, dayArray);
+
+        int temp = 0;
+        System.out.println(monthSpinner.getSelectedItem());
+        ArrayAdapter dayAdapter= new ArrayAdapter(this, android.R.layout.simple_spinner_item, dayArray31);
         monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         daySpinner.setAdapter(dayAdapter);
-       // daySpinner.setEnabled(false);
+
+        if(monthSelected.equalsIgnoreCase("September")){
+            dayAdapter.add("that");
+            dayAdapter.notifyDataSetChanged();
+            System.out.println(" change");
+        } else {
+            if (monthSelected.equals("poo")) {
+                dayAdapter.add("default");
+                dayAdapter.notifyDataSetChanged();
+                System.out.println("No change");
+            }
+
+        }
 
 
 
-        // ** Set Text for year Textview
+
+
+        // ** *Set Text for year Textview ***
         TextView yearTextView = (TextView) findViewById(R.id.yearText);
         yearTextView.setText("Year");
 
+        // *** Spinner Info (year) ***
+        final Spinner yearSpinner= (Spinner) findViewById(R.id.year);
+        ArrayAdapter yearAdapter= new ArrayAdapter(this, android.R.layout.simple_spinner_item, yearArray);
+        yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        yearSpinner.setAdapter(yearAdapter);
+
+
+
+        //moveOn.setEnabled(false);
+
+
+        // Button (Default not Enabled b/c verified in checkForCompletion()
+        Button button = (Button) findViewById(R.id.moveOn);
+        button.setEnabled(false);
+        button.setText("Enter Birthday");
 
 
 
@@ -85,24 +138,93 @@ public class EnterBirthDay extends AppCompatActivity {
 
 
 
-        // ** Logic for selecting days (because different months have a different # of days **
+
+
+        // ** Logic for selecting days (because different months have a different # of days) **
         monthSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String monthSelected = parent.getItemAtPosition(position).toString();
+                 monthSelected = parent.getItemAtPosition(position).toString();
                 if(monthSelected.equalsIgnoreCase("--")){
                     daySpinner.setEnabled(false);
+                    daySpinner.setSelection(0);
+
+                    yearSpinner.setSelection(0);
+                    yearSpinner.setEnabled(false);
                 }
                 else{
                     daySpinner.setEnabled(true);
+
+                    // Logic to select correct day array (31,30, or 29)
+//                    daySpinner.clear();
+//                    final Spinner daySpinner= (Spinner) findViewById(R.id.day);
+
+                    int temp = 0;
+
+//                    ArrayAdapter dayAdapter= new ArrayAdapter(this, android.R.layout.simple_spinner_item, dayArray31);
+//                    dayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    //daySpinner.setAdapter(dayAdapter);
+
                 }
-                System.out.println(monthSelected);
+
             }
+
+            // Auto generated. Not needed, with spinner there is always something selected
             public void onNothingSelected(AdapterView<?> parent) {
                 daySpinner.setEnabled(false);
             }
         });
 
+        // ** Logic for selecting Year (so the user has to enter days before year) **
+        daySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                daySelected = parent.getItemAtPosition(position).toString();
+                if(daySelected.equalsIgnoreCase("--")){
+                    yearSpinner.setEnabled(false);
+                    yearSpinner.setSelection(0);
+                }
+                else {
+                    yearSpinner.setEnabled(true);
 
 
+                }
+
+            }
+
+            // Auto generated. Not needed, with spinner b/c there is always something selected
+            public void onNothingSelected(AdapterView<?> parent) {
+                yearSpinner.setEnabled(false);
+            }
+        });
+
+        // ** Logic for enabling button **
+        yearSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                yearSelected = parent.getItemAtPosition(position).toString();
+                if(yearSelected.equalsIgnoreCase("--")){
+
+                }
+                else {
+                    checkForCompletion();
+                }
+            }
+
+            // Auto generated. Not needed, with spinner b/c there is always something selected
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
-}
+     void checkContent() {
+       // if ( !monthSelected.equals("--") && !daySelected.equals("--") && yearSelected.equals("--")) {
+            System.out.println(monthSelected);
+       // }
+    }
+
+    void checkForCompletion(){
+        Button button = (Button) findViewById(R.id.moveOn);
+        button.setEnabled(true);
+        button.setText("Contiune to step 3");
+        checkContent();
+        }
+    }
+
