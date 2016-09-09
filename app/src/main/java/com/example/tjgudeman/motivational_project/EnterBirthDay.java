@@ -129,6 +129,9 @@ public class EnterBirthDay extends AppCompatActivity {
 
             public void onClick(View v){
                 Intent i = new Intent(getApplicationContext(),Results.class);
+                i.putExtra("getDay",daySelected);
+                i.putExtra("getMonth", monthSelected);
+                i.putExtra("getYear", yearSelected);
                 startActivity(i);
             }
 

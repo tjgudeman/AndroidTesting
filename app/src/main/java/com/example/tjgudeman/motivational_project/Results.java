@@ -19,6 +19,12 @@ public class Results extends AppCompatActivity {
         // New instance
         new EnterBirthDay();
 
+        String month = getIntent().getStringExtra("getMonth");
+
+        String day = getIntent().getStringExtra("getDay");
+        String year = getIntent().getStringExtra("getYear");
+        System.out.println(month + "\n"+  day + "\n" + year);
+
 
 //        String nameOfUser=  EnterBirthDay.month.getSelectedItem().toString();
 //        System.out.println(nameOfUser);
