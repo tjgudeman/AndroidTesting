@@ -1,5 +1,6 @@
 package com.example.tjgudeman.motivational_project;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -20,12 +21,13 @@ public class EnterBirthDay extends AppCompatActivity {
    final String dayArray31[]={"--","1","2","3" ,"4", "5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20",
             "21","22","23","24","25","26","27","28","29","30","31"};
     final String dayArray30[]= Arrays.copyOf(dayArray31, dayArray31.length-1);
-    final String dayArray29[]= Arrays.copyOf(dayArray31, dayArray31.length-2);
+    final String dayArray28[]= Arrays.copyOf(dayArray31, dayArray31.length-3);
 
     public String daySelected= " ";
     public String monthSelected= " ";
     public String yearSelected= " ";
-    //Button moveOn= (Button) findViewById(R.id.moveOn);
+
+    public static Spinner month;
 
 
     @Override
@@ -51,7 +53,7 @@ public class EnterBirthDay extends AppCompatActivity {
 
 
 
-        // ** Text box 1 **
+        // *** Text box 1 ***
         TextView textView11 = (TextView) findViewById(R.id.text1B);
         String nameOfUser=  MainActivity.textBox1.getText().toString();
 
@@ -75,7 +77,7 @@ public class EnterBirthDay extends AppCompatActivity {
 
 
         // *** Spinner information (Month) ***
-        Spinner monthSpinner= (Spinner) findViewById(R.id.month);
+        final Spinner monthSpinner= (Spinner) findViewById(R.id.month);
         ArrayAdapter monthAdapter= new ArrayAdapter(this, android.R.layout.simple_spinner_item, monthArray);
         monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         monthSpinner.setAdapter(monthAdapter);
@@ -107,9 +109,6 @@ public class EnterBirthDay extends AppCompatActivity {
         }
 
 
-
-
-
         // ** *Set Text for year Textview ***
         TextView yearTextView = (TextView) findViewById(R.id.yearText);
         yearTextView.setText("Year");
@@ -121,26 +120,29 @@ public class EnterBirthDay extends AppCompatActivity {
         yearSpinner.setAdapter(yearAdapter);
 
 
-
-        //moveOn.setEnabled(false);
-
-
-        // Button (Default not Enabled b/c verified in checkForCompletion()
+        // *** Button (Default not Enabled b/c verified in checkForCompletion() ***
         Button button = (Button) findViewById(R.id.moveOn);
         button.setEnabled(false);
         button.setText("Enter Birthday");
 
+        button.setOnClickListener(new View.OnClickListener(){
+
+            public void onClick(View v){
+                Intent i = new Intent(getApplicationContext(),Results.class);
+                startActivity(i);
+            }
+
+        });
 
 
 
 
 
 
+        // ********************************************************************************
+        // Enabling Spinners to remember info and enable/disable depending on input
+        // ********************************************************************************
 
-
-
-
-        // ** Logic for selecting days (because different months have a different # of days) **
         monthSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                  monthSelected = parent.getItemAtPosition(position).toString();
@@ -154,25 +156,32 @@ public class EnterBirthDay extends AppCompatActivity {
                 else{
                     daySpinner.setEnabled(true);
 
-                    // Logic to select correct day array (31,30, or 29)
-//                    daySpinner.clear();
-//                    final Spinner daySpinner= (Spinner) findViewById(R.id.day);
 
-                    int temp = 0;
-
-//                    ArrayAdapter dayAdapter= new ArrayAdapter(this, android.R.layout.simple_spinner_item, dayArray31);
-//                    dayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    //daySpinner.setAdapter(dayAdapter);
-
-                }
-
+                    // *** Logic to select correct days for month (ie: September = 30) ***
+                    if(position % 2 == 1) { //Odd months
+                        if (position <= 7) { //Jan, March, May,
+                            reCreateMonthSpinner(dayArray31);
+                        } else {
+                            reCreateMonthSpinner(dayArray30); // September, November
+                        }
+                    }
+                    else // Even months
+                        if(position >= 8) //
+                            reCreateMonthSpinner(dayArray31); //August, October, December
+                    else
+                            if(position == 2)
+                                reCreateMonthSpinner(dayArray28); // February
+                    else
+                                reCreateMonthSpinner(dayArray30); // April, June
+                    }
             }
-
             // Auto generated. Not needed, with spinner there is always something selected
             public void onNothingSelected(AdapterView<?> parent) {
                 daySpinner.setEnabled(false);
             }
         });
+
+
 
         // ** Logic for selecting Year (so the user has to enter days before year) **
         daySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -210,21 +219,27 @@ public class EnterBirthDay extends AppCompatActivity {
 
             // Auto generated. Not needed, with spinner b/c there is always something selected
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
     }
-     void checkContent() {
-       // if ( !monthSelected.equals("--") && !daySelected.equals("--") && yearSelected.equals("--")) {
-            System.out.println(monthSelected);
-       // }
-    }
 
+
+    // *** This class will check to see if all 3 spinners have been entered with valid data ***
     void checkForCompletion(){
         Button button = (Button) findViewById(R.id.moveOn);
         button.setEnabled(true);
         button.setText("Contiune to step 3");
-        checkContent();
         }
+
+
+    // *** This class will recreate the day spinner so the correct days areavailable depending on the month
+    void reCreateMonthSpinner(String[] a){
+        Spinner daySpinner = (Spinner) findViewById(R.id.day);
+        ArrayAdapter dayAdapter= new ArrayAdapter(this, android.R.layout.simple_spinner_item, a);
+        dayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        daySpinner.setAdapter(dayAdapter);
     }
+    }
+
+
 

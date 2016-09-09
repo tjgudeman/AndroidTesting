@@ -16,6 +16,13 @@ public class Results extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // New instance
+        new EnterBirthDay();
+
+
+//        String nameOfUser=  EnterBirthDay.month.getSelectedItem().toString();
+//        System.out.println(nameOfUser);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
