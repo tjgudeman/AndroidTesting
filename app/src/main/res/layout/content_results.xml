@@ -12,4 +12,39 @@
     tools:context="com.example.tjgudeman.motivational_project.Results"
     tools:showIn="@layout/activity_results">
 
+
+    <TextView
+        android:id="@+id/Congrats"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-medium"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textSize="32sp"/>
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fontFamily="sans-serif-medium"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textSize="58sp"
+        android:layout_below="@+id/Congrats"/>
+    <LinearLayout
+        android:id="@+id/LayoutBottomButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/moveOn"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            />
+
+    </LinearLayout>
+
 </RelativeLayout>

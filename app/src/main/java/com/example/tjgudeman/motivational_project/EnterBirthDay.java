@@ -26,6 +26,9 @@ public class EnterBirthDay extends AppCompatActivity {
     public String daySelected= " ";
     public String monthSelected= " ";
     public String yearSelected= " ";
+    public int monthPos= -1;
+    public int dayPos= -1;
+    public String year= " ";
 
     public static Spinner month;
 
@@ -129,9 +132,9 @@ public class EnterBirthDay extends AppCompatActivity {
 
             public void onClick(View v){
                 Intent i = new Intent(getApplicationContext(),Results.class);
-                i.putExtra("getDay",daySelected);
-                i.putExtra("getMonth", monthSelected);
-                i.putExtra("getYear", yearSelected);
+                i.putExtra("getDay",dayPos);
+                i.putExtra("getMonth", monthPos);
+                i.putExtra("getYear", year);
                 startActivity(i);
             }
 
@@ -158,6 +161,7 @@ public class EnterBirthDay extends AppCompatActivity {
                 }
                 else{
                     daySpinner.setEnabled(true);
+                    monthPos = position;
 
 
                     // *** Logic to select correct days for month (ie: September = 30) ***
@@ -196,8 +200,7 @@ public class EnterBirthDay extends AppCompatActivity {
                 }
                 else {
                     yearSpinner.setEnabled(true);
-
-
+                    dayPos = position;
                 }
 
             }
@@ -213,10 +216,12 @@ public class EnterBirthDay extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 yearSelected = parent.getItemAtPosition(position).toString();
                 if(yearSelected.equalsIgnoreCase("--")){
+                    inComplete();
 
                 }
                 else {
                     checkForCompletion();
+                    year = yearSelected;
                 }
             }
 
@@ -233,6 +238,13 @@ public class EnterBirthDay extends AppCompatActivity {
         button.setEnabled(true);
         button.setText("Contiune to step 3");
         }
+
+    void inComplete(){
+        Button button = (Button) findViewById(R.id.moveOn);
+        button.setEnabled(false);
+        button.setText("Enter Birthday");
+
+    }
 
 
     // *** This class will recreate the day spinner so the correct days areavailable depending on the month
