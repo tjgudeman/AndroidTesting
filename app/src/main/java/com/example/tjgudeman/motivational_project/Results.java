@@ -1,6 +1,7 @@
 package com.example.tjgudeman.motivational_project;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -10,9 +11,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+
+import javax.xml.parsers.SAXParserFactory;
 
 public class Results extends AppCompatActivity {
 
@@ -24,20 +36,20 @@ public class Results extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         // New instance
-       // new EnterBirthDay();
+        // new EnterBirthDay();
 
         //String month = getIntent().getStringExtra("getMonth");
-        int month = getIntent().getIntExtra("getMonth",0);
+        int month = getIntent().getIntExtra("getMonth", 0);
 
         // ** Pull data from EnterBirthdayClass
-        int day = getIntent().getIntExtra("getDay",0);
+        int day = getIntent().getIntExtra("getDay", 0);
         String yearString = getIntent().getStringExtra("getYear"); // Cast to int b/c position doesn't help
-        int year= Integer.parseInt(yearString);
-        System.out.println(month + "\n"+  day + "\n" + year);
+        int year = Integer.parseInt(yearString);
+        System.out.println(month + "\n" + day + "\n" + year);
 
         // Fill Calendar with values from Previous Intent
         Calendar calendar = new GregorianCalendar();
-        calendar.set(Calendar.MONTH, month-1);
+        calendar.set(Calendar.MONTH, month - 1);
         calendar.set(Calendar.DAY_OF_MONTH, day);
         calendar.set(Calendar.YEAR, year);
 
@@ -49,10 +61,9 @@ public class Results extends AppCompatActivity {
         System.out.println(df.format(calendar.getTime()));
 
 
-
         // *** TextBox1 ***
         TextView congrats = (TextView) findViewById(R.id.Congrats);
-        congrats.setText("Guess what! Your parents concieved you: ");
+        congrats.setText("Guess what! You were concieved: ");
 
         // *** TextBox with results ***
         TextView results = (TextView) findViewById(R.id.date);
@@ -61,10 +72,10 @@ public class Results extends AppCompatActivity {
         // Button @ bottom pf page
         Button moveOn = (Button) findViewById(R.id.moveOn);
         moveOn.setText("Try Again");
-        moveOn.setOnClickListener(new View.OnClickListener(){
+        moveOn.setOnClickListener(new View.OnClickListener() {
 
-            public void onClick(View v){
-                Intent i = new Intent(getApplicationContext(),MainActivity.class);
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(i);
             }
 
@@ -73,14 +84,121 @@ public class Results extends AppCompatActivity {
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setVisibility(View.INVISIBLE);
-        fab.setOnClickListener(new View.OnClickListener()
-        {
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
+        Thread thread = new Thread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                try
+                {
+                    URL url;
+                        InputStream is = null;
+                        BufferedReader br;
+                        String line;
+
+                        try {
+                            url = new URL("http://takemeback.to/19-September-1994");
+                            is = url.openStream();  // throws an IOException
+                            br = new BufferedReader(new InputStreamReader(is));
+
+                            while ((line = br.readLine()) != null) {
+                                System.out.println(line);
+                            }
+                        } catch (MalformedURLException mue) {
+                            mue.printStackTrace();
+                        } catch (IOException ioe) {
+                            ioe.printStackTrace();
+                        } finally {
+                            try {
+                                if (is != null) is.close();
+                            } catch (IOException ioe) {
+                                // nothing to see here
+                            }
+                        }
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        thread.start();
+
+
     }
 
+//    private class RetrieveFeedTask extends AsyncTask<String, Void, RSSFeed> {
+//
+//        private Exception exception;
+//
+//        protected RSSFeed doInBackground(String... urls) {
+//            try {
+//                URL url = new URL(urls[0]);
+//                SAXParserFactory factory = SAXParserFactory.newInstance();
+//                SAXParser parser = factory.newSAXParser();
+//                XMLReader xmlreader = parser.getXMLReader();
+//                RssHandler theRSSHandler = new RssHandler();
+//                xmlreader.setContentHandler(theRSSHandler);
+//                InputSource is = new InputSource(url.openStream());
+//                xmlreader.parse(is);
+//
+//                return theRSSHandler.getFeed();
+//            } catch (Exception e) {
+//                this.exception = e;
+//
+//                return null;
+//            }
+//        }
+//
+//        protected void onPostExecute(RSSFeed feed) {
+//            // TODO: check this.exception
+//            // TODO: do something with the feed
+//        }
+//    }
+
+
+
+
+//    public void urlReader() {
+//        URL url;
+//        InputStream is = null;
+//        BufferedReader br;
+//        String line;
+//
+//        try {
+//            url = new URL("http://takemeback.to/19-September-1994");
+//            is = url.openStream();  // throws an IOException
+//            br = new BufferedReader(new InputStreamReader(is));
+//
+//            while ((line = br.readLine()) != null) {
+//                System.out.println(line);
+//            }
+//        } catch (MalformedURLException mue) {
+//            mue.printStackTrace();
+//        } catch (IOException ioe) {
+//            ioe.printStackTrace();
+//        } finally {
+//            try {
+//                if (is != null) is.close();
+//            } catch (IOException ioe) {
+//                // nothing to see here
+//            }
+//        }
+//
+//
+//    }
 }
+
+
+
+
+
+
