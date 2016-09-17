@@ -28,6 +28,7 @@ import javax.xml.parsers.SAXParserFactory;
 
 public class Results extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +64,7 @@ public class Results extends AppCompatActivity {
 
         // *** TextBox1 ***
         TextView congrats = (TextView) findViewById(R.id.Congrats);
-        congrats.setText("Guess what! You were concieved: ");
+        congrats.setText("Guess what? You were concieved: ");
 
         // *** TextBox with results ***
         TextView results = (TextView) findViewById(R.id.date);
@@ -82,6 +83,7 @@ public class Results extends AppCompatActivity {
         });
 
 
+        // **** Floating action button is invisible so we don't have to worry about it *******
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setVisibility(View.INVISIBLE);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -91,6 +93,9 @@ public class Results extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+
+        // **** Starting new thread so we can pull info from web ****
         Thread thread = new Thread(new Runnable()
         {
             @Override
@@ -107,9 +112,23 @@ public class Results extends AppCompatActivity {
                             url = new URL("http://takemeback.to/19-September-1994");
                             is = url.openStream();  // throws an IOException
                             br = new BufferedReader(new InputStreamReader(is));
+                            String lineNeeded= "<div itemscope itemtype=\"http://schema.org/Event\"><meta itemprop=\"startDate\" content=\"1994-09-19\"><meta itemprop=\"Description\" content=\"What happened in the world on that day\"><meta itemprop=\"name\" content=\"World Event\"><p>";
 
+
+                            // Reads whole file/site
                             while ((line = br.readLine()) != null) {
-                                System.out.println(line);
+                                if(line.equals(lineNeeded)) //Will catch line we care about
+                                    while (!(line.contains("</p></div>"))) { //Will go until we hit the lines we don't car about
+                                        System.out.println(line);
+                                        line= br.readLine();
+                                    }
+
+
+
+
+
+
+
                             }
                         } catch (MalformedURLException mue) {
                             mue.printStackTrace();
@@ -134,6 +153,8 @@ public class Results extends AppCompatActivity {
 
 
     }
+
+
 
 //    private class RetrieveFeedTask extends AsyncTask<String, Void, RSSFeed> {
 //
