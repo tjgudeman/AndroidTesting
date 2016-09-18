@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -27,6 +28,8 @@ import java.util.GregorianCalendar;
 import javax.xml.parsers.SAXParserFactory;
 
 public class Results extends AppCompatActivity {
+
+//    public static StringBuilder wholeString;
 
 
     @Override
@@ -40,11 +43,11 @@ public class Results extends AppCompatActivity {
         // new EnterBirthDay();
 
         //String month = getIntent().getStringExtra("getMonth");
-        int month = getIntent().getIntExtra("getMonth", 0);
+        final int month = getIntent().getIntExtra("getMonth", 0);
 
         // ** Pull data from EnterBirthdayClass
         int day = getIntent().getIntExtra("getDay", 0);
-        String yearString = getIntent().getStringExtra("getYear"); // Cast to int b/c position doesn't help
+        final String yearString = getIntent().getStringExtra("getYear"); // Cast to int b/c position doesn't help
         int year = Integer.parseInt(yearString);
         System.out.println(month + "\n" + day + "\n" + year);
 
@@ -82,6 +85,18 @@ public class Results extends AppCompatActivity {
 
         });
 
+// ******** Assign values of month and day as a string to they could be given to the URL *************
+        final String monthString=getMonth(month);
+
+        String tempA = String.valueOf(day);
+        if(day <=9) {                           // URL needs to add a 0 to the day if it is in single digits
+            tempA = tempA.format("%02d",day);
+        }
+        final String dayString= tempA;
+
+        System.out.println(monthString + "  " + dayString + "  " + yearString);
+
+
 
         // **** Floating action button is invisible so we don't have to worry about it *******
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -96,6 +111,7 @@ public class Results extends AppCompatActivity {
 
 
         // **** Starting new thread so we can pull info from web ****
+        final StringBuilder wholeString= new StringBuilder(" ");
         Thread thread = new Thread(new Runnable()
         {
             @Override
@@ -108,8 +124,12 @@ public class Results extends AppCompatActivity {
                         BufferedReader br;
                         String line;
 
+
+
                         try {
-                            url = new URL("http://takemeback.to/19-September-1994");
+                            String a="September";
+                            url = new URL("http://takemeback.to/" + dayString + "-" + monthString + "-1994" +"#");
+                            System.out.print(url);
                             is = url.openStream();  // throws an IOException
                             br = new BufferedReader(new InputStreamReader(is));
                             String lineNeeded= "<div itemscope itemtype=\"http://schema.org/Event\"><meta itemprop=\"startDate\" content=\"1994-09-19\"><meta itemprop=\"Description\" content=\"What happened in the world on that day\"><meta itemprop=\"name\" content=\"World Event\"><p>";
@@ -117,17 +137,12 @@ public class Results extends AppCompatActivity {
 
                             // Reads whole file/site
                             while ((line = br.readLine()) != null) {
-                                if(line.equals(lineNeeded)) //Will catch line we care about
+                                if(line.contains("content=\"What happened in the world on that day\"><meta itemprop=\"name\" content=\"World Event\"><p>")) //Will catch line we care about
                                     while (!(line.contains("</p></div>"))) { //Will go until we hit the lines we don't car about
-                                        System.out.println(line);
+                                        String temp= line.replaceAll("(?s)<[^>]*>(\\s*<[^>]*>)*", " ");
+                                        wholeString.append(temp);
                                         line= br.readLine();
                                     }
-
-
-
-
-
-
 
                             }
                         } catch (MalformedURLException mue) {
@@ -141,81 +156,42 @@ public class Results extends AppCompatActivity {
                                 // nothing to see here
                             }
                         }
+
+
                 }
                 catch (Exception e)
                 {
                     e.printStackTrace();
                 }
+
+
+                String temp=wholeString.toString();
+                temp =trimString(temp);
+                System.out.println(temp);
             }
         });
+
 
         thread.start();
 
 
     }
 
+    public String trimString(String a){
+        while(a.contains(" , ")){
+            a=a.replace(" , ",", ");
+        }
 
+        while(a.contains(" . ")){
+            a=a.replace(" . ",". ");
+        }
 
-//    private class RetrieveFeedTask extends AsyncTask<String, Void, RSSFeed> {
-//
-//        private Exception exception;
-//
-//        protected RSSFeed doInBackground(String... urls) {
-//            try {
-//                URL url = new URL(urls[0]);
-//                SAXParserFactory factory = SAXParserFactory.newInstance();
-//                SAXParser parser = factory.newSAXParser();
-//                XMLReader xmlreader = parser.getXMLReader();
-//                RssHandler theRSSHandler = new RssHandler();
-//                xmlreader.setContentHandler(theRSSHandler);
-//                InputSource is = new InputSource(url.openStream());
-//                xmlreader.parse(is);
-//
-//                return theRSSHandler.getFeed();
-//            } catch (Exception e) {
-//                this.exception = e;
-//
-//                return null;
-//            }
-//        }
-//
-//        protected void onPostExecute(RSSFeed feed) {
-//            // TODO: check this.exception
-//            // TODO: do something with the feed
-//        }
-//    }
+        return a;
+    }
 
-
-
-
-//    public void urlReader() {
-//        URL url;
-//        InputStream is = null;
-//        BufferedReader br;
-//        String line;
-//
-//        try {
-//            url = new URL("http://takemeback.to/19-September-1994");
-//            is = url.openStream();  // throws an IOException
-//            br = new BufferedReader(new InputStreamReader(is));
-//
-//            while ((line = br.readLine()) != null) {
-//                System.out.println(line);
-//            }
-//        } catch (MalformedURLException mue) {
-//            mue.printStackTrace();
-//        } catch (IOException ioe) {
-//            ioe.printStackTrace();
-//        } finally {
-//            try {
-//                if (is != null) is.close();
-//            } catch (IOException ioe) {
-//                // nothing to see here
-//            }
-//        }
-//
-//
-//    }
+    public String getMonth(int month) {
+        return new DateFormatSymbols().getMonths()[month-1];
+    }
 }
 
 
