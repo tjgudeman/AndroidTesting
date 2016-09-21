@@ -25,12 +25,21 @@
     <TextView
         android:id="@+id/date"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:fontFamily="sans-serif-medium"
         android:textStyle="bold"
         android:gravity="center"
         android:textSize="58sp"
         android:layout_below="@+id/Congrats"/>
+
+    <TextView
+        android:id="@+id/thatDay"
+        android:layout_width="196dp"
+        android:layout_height="296dp"
+        android:layout_below="@+id/date"
+        android:layout_centerInParent="true"
+       />
+
     <LinearLayout
         android:id="@+id/LayoutBottomButton"
         android:layout_width="fill_parent"

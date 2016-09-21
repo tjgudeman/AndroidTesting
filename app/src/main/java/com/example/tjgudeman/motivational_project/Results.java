@@ -29,8 +29,9 @@ import javax.xml.parsers.SAXParserFactory;
 
 public class Results extends AppCompatActivity {
 
-//    public static StringBuilder wholeString;
 
+    public TextView thatDay;
+    public String temp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +74,15 @@ public class Results extends AppCompatActivity {
         TextView results = (TextView) findViewById(R.id.date);
         results.setText((df.format(calendar.getTime())));
 
-        // Button @ bottom pf page
+
+      //  *** We'll see ****
+        thatDay =(TextView)(findViewById(R.id.thatDay));
+        thatDay.setText(temp);
+//
+
+
+
+        // Button @ bottom of page
         Button moveOn = (Button) findViewById(R.id.moveOn);
         moveOn.setText("Try Again");
         moveOn.setOnClickListener(new View.OnClickListener() {
@@ -85,16 +94,22 @@ public class Results extends AppCompatActivity {
 
         });
 
-// ******** Assign values of month and day as a string to they could be given to the URL *************
+
+
+
+// **********************************************************************************************
+//  Assign values of month and day as a string to they could be given to the URL
+// *******************************************************************************************************
         final String monthString=getMonth(month);
 
         String tempA = String.valueOf(day);
         if(day <=9) {                           // URL needs to add a 0 to the day if it is in single digits
-            tempA = tempA.format("%02d",day);
+            tempA = tempA.format("%02d",day); //add a 0 so it takes up to the 10's place
         }
         final String dayString= tempA;
+        final int yearString2= calendar.get(Calendar.YEAR);
 
-        System.out.println(monthString + "  " + dayString + "  " + yearString);
+        System.out.println(monthString + "  " + dayString + "  " + yearString2);
 
 
 
@@ -122,13 +137,13 @@ public class Results extends AppCompatActivity {
                     URL url;
                         InputStream is = null;
                         BufferedReader br;
-                        String line;
+                        String line; //
 
 
 
                         try {
                             String a="September";
-                            url = new URL("http://takemeback.to/" + dayString + "-" + monthString + "-1994" +"#");
+                            url = new URL("http://takemeback.to/" + dayString + "-" + monthString + "-"+yearString2 +"#");
                             System.out.print(url);
                             is = url.openStream();  // throws an IOException
                             br = new BufferedReader(new InputStreamReader(is));
@@ -156,8 +171,6 @@ public class Results extends AppCompatActivity {
                                 // nothing to see here
                             }
                         }
-
-
                 }
                 catch (Exception e)
                 {
@@ -165,19 +178,21 @@ public class Results extends AppCompatActivity {
                 }
 
 
-                String temp=wholeString.toString();
+                temp=wholeString.toString();
                 temp =trimString(temp);
                 System.out.println(temp);
+//                thatDay =(TextView)(findViewById(R.id.thatDay));
+//                thatDay.setText(temp);
             }
         });
-
-
         thread.start();
-
-
     }
 
+
+
+
     public String trimString(String a){
+        String notNeeded= " But much more happened that day: find out below..";
         while(a.contains(" , ")){
             a=a.replace(" , ",", ");
         }
@@ -186,12 +201,20 @@ public class Results extends AppCompatActivity {
             a=a.replace(" . ",". ");
         }
 
+        while(a.contains(notNeeded)){
+            a=a.replace(notNeeded," ");
+        }
+
         return a;
     }
 
     public String getMonth(int month) {
+
+        System.out.println("this");
         return new DateFormatSymbols().getMonths()[month-1];
     }
+
+
 }
 
 
