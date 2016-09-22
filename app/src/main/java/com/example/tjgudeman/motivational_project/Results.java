@@ -3,6 +3,7 @@ package com.example.tjgudeman.motivational_project;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -32,6 +33,7 @@ public class Results extends AppCompatActivity {
 
     public TextView thatDay;
     public String temp;
+    Intent i = new Intent();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +50,7 @@ public class Results extends AppCompatActivity {
 
         // ** Pull data from EnterBirthdayClass
         int day = getIntent().getIntExtra("getDay", 0);
-        final String yearString = getIntent().getStringExtra("getYear"); // Cast to int b/c position doesn't help
+        final String yearString = getIntent().getStringExtra("getYear");
         int year = Integer.parseInt(yearString);
         System.out.println(month + "\n" + day + "\n" + year);
 
@@ -81,14 +83,29 @@ public class Results extends AppCompatActivity {
 //
 
 
+        // Button that sends to Intent thatDay
+        thatDay.setOnClickListener(new View.OnClickListener(){
+
+            public void onClick(View v){
+                Intent i = new Intent(getApplicationContext(),thatDay.class);
+                startActivity(i);
+            }
+            //
+
+        });
 
         // Button @ bottom of page
         Button moveOn = (Button) findViewById(R.id.moveOn);
-        moveOn.setText("Try Again");
+        moveOn.setText("See what happened that day >>");
+
+        final Intent i = new Intent(getApplicationContext(), thatDay.class);
         moveOn.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+               // final Intent i = new Intent(getApplicationContext(), MainActivity.class);
+
+                String p="blue steel";
+                i.putExtra("tester", p);
                 startActivity(i);
             }
 
@@ -99,7 +116,7 @@ public class Results extends AppCompatActivity {
 
 // **********************************************************************************************
 //  Assign values of month and day as a string to they could be given to the URL
-// *******************************************************************************************************
+// **********************************************************************************************
         final String monthString=getMonth(month);
 
         String tempA = String.valueOf(day);
@@ -125,13 +142,19 @@ public class Results extends AppCompatActivity {
         });
 
 
-        // **** Starting new thread so we can pull info from web ****
+
+
+
+        //// **********************************************************************************************
+        //          Starting new thread so we can pull info from web
+        // **********************************************************************************************
         final StringBuilder wholeString= new StringBuilder(" ");
         Thread thread = new Thread(new Runnable()
         {
             @Override
             public void run()
             {
+                Looper.prepare();
                 try
                 {
                     URL url;
@@ -181,11 +204,24 @@ public class Results extends AppCompatActivity {
                 temp=wholeString.toString();
                 temp =trimString(temp);
                 System.out.println(temp);
+                i.putExtra("results", temp);
 //                thatDay =(TextView)(findViewById(R.id.thatDay));
 //                thatDay.setText(temp);
+                Looper.loop();
+
+
+
             }
+
         });
         thread.start();
+
+
+
+//        Results a =new Results();
+//        a.thatDay=(TextView)findViewById(R.id.thatDay);
+//        a.thatDay.setText("this");
+
     }
 
 
@@ -202,7 +238,7 @@ public class Results extends AppCompatActivity {
         }
 
         while(a.contains(notNeeded)){
-            a=a.replace(notNeeded," ");
+            a=a.replace(notNeeded,"");
         }
 
         return a;
