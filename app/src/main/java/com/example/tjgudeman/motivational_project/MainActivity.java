@@ -20,6 +20,9 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import java.util.regex.Pattern;
+
 public class MainActivity extends AppCompatActivity {
 
     public static EditText textBox1;
@@ -116,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
     void checkForEmpty(){
         Button button = (Button) findViewById(R.id.button);
         String name = textBox1.getText().toString();
-        if(name.length() < 5){
+        if(Pattern.matches("\\W+", name)){
             button.setEnabled(false);
             button.setText("Enter Name");
         } else {
