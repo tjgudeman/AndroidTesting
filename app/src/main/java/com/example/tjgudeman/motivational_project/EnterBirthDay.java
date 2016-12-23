@@ -1,6 +1,7 @@
 package com.example.tjgudeman.motivational_project;
 
 import android.content.Intent;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class EnterBirthDay extends AppCompatActivity {
@@ -51,8 +53,16 @@ public class EnterBirthDay extends AppCompatActivity {
         final String dayArray29[]= Arrays.copyOf(dayArray31, dayArray31.length-2);
 
 
-        String yearArray[] = {"--", "1990", "1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999"};
 
+        ArrayList<String> yearArray = new ArrayList<String>();
+        yearArray.add( "--");
+
+        //Easier way to fill year array used in slider
+        for(int i = 1950; i < 2001; i++){
+            int tempInt = i;
+            String tempString= Integer.toString(tempInt);
+            yearArray.add(tempString);
+        }
 
 
 

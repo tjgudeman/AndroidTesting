@@ -28,6 +28,10 @@ import java.util.GregorianCalendar;
 
 import javax.xml.parsers.SAXParserFactory;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+
 public class Results extends AppCompatActivity {
 
 
@@ -170,18 +174,17 @@ public class Results extends AppCompatActivity {
                             System.out.print(url);
                             is = url.openStream();  // throws an IOException
                             br = new BufferedReader(new InputStreamReader(is));
-                            String lineNeeded= "<div itemscope itemtype=\"http://schema.org/Event\"><meta itemprop=\"startDate\" content=\"1994-09-19\"><meta itemprop=\"Description\" content=\"What happened in the world on that day\"><meta itemprop=\"name\" content=\"World Event\"><p>";
-
 
                             // Reads whole file/site
                             while ((line = br.readLine()) != null) {
                                 if(line.contains("content=\"What happened in the world on that day\"><meta itemprop=\"name\" content=\"World Event\"><p>")) //Will catch line we care about
-                                    while (!(line.contains("</p></div>"))) { //Will go until we hit the lines we don't car about
+                                    while (!(line.contains(".<br>"))) { //Will go until we hit the lines we don't car about
                                         String temp= line.replaceAll("(?s)<[^>]*>(\\s*<[^>]*>)*", " ");
+                                        //android.text.Html.fromHtml(temp);
                                         wholeString.append(temp);
                                         line= br.readLine();
+                                        System.out.println(line + " ");
                                     }
-
                             }
                         } catch (MalformedURLException mue) {
                             mue.printStackTrace();
@@ -191,7 +194,6 @@ public class Results extends AppCompatActivity {
                             try {
                                 if (is != null) is.close();
                             } catch (IOException ioe) {
-                                // nothing to see here
                             }
                         }
                 }
@@ -200,13 +202,10 @@ public class Results extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-
                 temp=wholeString.toString();
                 temp =trimString(temp);
-                System.out.println(temp);
+                System.out.println("This is from outside loop: " + temp);
                 i.putExtra("results", temp);
-//                thatDay =(TextView)(findViewById(R.id.thatDay));
-//                thatDay.setText(temp);
                 Looper.loop();
 
 
@@ -216,11 +215,6 @@ public class Results extends AppCompatActivity {
         });
         thread.start();
 
-
-
-//        Results a =new Results();
-//        a.thatDay=(TextView)findViewById(R.id.thatDay);
-//        a.thatDay.setText("this");
 
     }
 
@@ -246,7 +240,7 @@ public class Results extends AppCompatActivity {
 
     public String getMonth(int month) {
 
-        System.out.println("this");
+        //System.out.println("this");
         return new DateFormatSymbols().getMonths()[month-1];
     }
 

@@ -20,9 +20,8 @@
         android:id="@+id/results"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-medium"
-        android:textStyle="normal|bold"
-        android:textSize="45sp"/>
+        android:fontFamily="robot-regular"
+        android:textSize="30sp"/>
 
     </RelativeLayout>
 
